@@ -41,7 +41,6 @@ elif n!=1 and n%4==1:
         for j in range(c):
             if arr2[i][j] == 'O':
                 Q.append((i, j))
-
     while Q:
         now = Q.popleft()
         arr3[now[0]][now[1]] = '.'
