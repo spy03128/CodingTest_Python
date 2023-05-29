@@ -1,43 +1,27 @@
-n = int(input())
+import sys
+input = sys.stdin.readline
+N = int(input())
+array = [list(map(int, input().split())) for _ in range(N)]
+array.sort(key=lambda x: (x[0], -x[1]))
+sc = [[0]*366 for _ in range(N)]
+maxim, min_len, max_len, total = 0, array[0][0], array[0][1], 0
+for s,e in array:
+    idx = 0
+    min_len = min(min_len, s)
 
-calender = [[0] * 366 for _ in range(n)]
+    if s > max_len + 1:
+        total += (max_len - min_len + 1) * (maxim+1)
+        min_len = s
+        maxim = 0
+    for i in range(N):
+        if sc[i][s] == 0:
+            idx = i
+            break
+    for i in range(s, e+1):
+        sc[idx][i] = 1
+    maxim = max(maxim, idx)
+    max_len = max(max_len, e)
 
-todo = list()
+total += (max_len - min_len + 1) * (maxim + 1)
 
-for _ in range(n):
-    s, e = map(int, input().split(' '))
-    term = e - s + 1
-    todo.append((s, e, term))
-
-todo.sort(key=lambda x: (x[0], -x[2]))
-
-for k in range(len(todo)):
-    s, e = todo[k][0], todo[k][1]
-
-    for i in range(n):
-        if 1 in calender[i][s:e + 1]:
-            continue
-
-        for j in range(s, e + 1):
-            calender[i][j] = 1
-        break
-
-row = 0
-col = 0
-ans = 0
-for j in range(1, 366):
-    one_check = False
-    for i in range(n):
-        if calender[i][j] == 1:
-            one_check = True
-            row = max(row, i + 1)
-    if one_check:
-        col += 1
-    else:
-        ans += row * col
-        row = 0
-        col = 0
-if one_check:
-    ans += row * col
-
-print(ans)
+print(total)
